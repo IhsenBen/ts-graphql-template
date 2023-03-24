@@ -1,0 +1,19 @@
+{
+  "name": "ts-graphql-template",
+  "version": "1.0.0",
+  "description": "personal graphql template server in ts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IhsenBen/ts-graphql-template.git"
+  },
+  "author": "Ihsen Ben Ali",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IhsenBen/ts-graphql-template/issues"
+  },
+  "homepage": "https://github.com/IhsenBen/ts-graphql-template#readme"
+}
