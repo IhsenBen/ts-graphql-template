@@ -1,47 +1,61 @@
+
 import { createServer } from "http";
 import express from "express";
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer} from "@apollo/server";
+import gql from 'graphql-tag';
+import http from 'http';
+import { expressMiddleware } from '@apollo/server/express4';
+import cors from 'cors';
+import { json } from "body-parser";
+import { prisma } from './prisma/client';
 
-// 1
 const startServer = async () => {
 
-  // 2
   const app = express()
   const httpServer = createServer(app)
 
-  // 3
   const typeDefs = gql`
+    type User {
+      id: ID!
+      email: String!  
+      name: String
+      posts: [String!]!
+    }
     type Query {
-      hello: String
+      user: [User!]!
+    }
+    type Query {
+      hello: String!
     }
   `;
 
-  // 4
   const resolvers = {
     Query: {
       hello: () => 'Hello world!',
+      user: () =>{
+        return prisma.user.findMany()
+      } 
     },
   };
 
-  // 5
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
   })
 
-  // 6
   await apolloServer.start()
 
-  // 7
-  apolloServer.applyMiddleware({
-      app,
-      path: '/api'
-  })
-
-  // 8
-  httpServer.listen({ port: process.env.PORT || 4000 }, () =>
-    console.log(`Server listening on localhost:4000${apolloServer.graphqlPath}`)
-  )
+  app.use(
+    '/graphql',
+    cors<cors.CorsRequest>(),
+    json(),
+    expressMiddleware(apolloServer, {
+      context: async ({ req }) => ({ token: req.headers.token }),
+    }),
+  );
+  
+  await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve));
+  console.log(`🚀 Server ready at http://localhost:4000/graphql`);
 }
 
 startServer()
