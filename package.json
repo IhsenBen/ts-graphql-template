@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
+    "build": "rimraf ./build && tsc",
     "start": "npm run build && node build/index.js",
-    "migrate": "npx prisma migrate dev"
+    "migrate": "npx prisma migrate dev",
+    "generate": "graphql-codegen",
+    "studio": "npx prisma studio"
   },
   "repository": {
     "type": "git",
@@ -22,20 +25,28 @@
     "schema": "src/prisma/schema.prisma"
   },
   "devDependencies": {
+    "@graphql-codegen/add": "^4.0.1",
+    "@graphql-codegen/graphql-modules-preset": "^3.1.1",
+    "@graphql-codegen/typescript-resolvers": "^3.1.1",
     "@types/cors": "^2.8.13",
     "@types/node": "^18.15.7",
     "nodemon": "^2.0.22",
     "prisma": "^4.11.0",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
   },
   "dependencies": {
     "@apollo/server": "^4.5.0",
+    "@graphql-codegen/cli": "^3.2.2",
+    "@graphql-codegen/typescript": "^3.0.2",
     "@prisma/client": "^4.11.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "graphql": "^16.6.0",
-    "graphql-tag": "^2.12.6"
+    "graphql-modules": "^2.1.2",
+    "graphql-tag": "^2.12.6",
+    "bcryptjs": "^2.4.3"
   }
 }

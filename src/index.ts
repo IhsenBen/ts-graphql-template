@@ -8,11 +8,15 @@ import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 import { json } from "body-parser";
 import { prisma } from './prisma/client';
+import { application } from './graphql/modulesLoader';
+
 
 const startServer = async () => {
 
   const app = express()
   const httpServer = createServer(app)
+
+  const schema = application.createSchemaForApollo();
 
   const typeDefs = gql`
     type User {
@@ -39,14 +43,13 @@ const startServer = async () => {
   };
 
   const apolloServer = new ApolloServer({
-    typeDefs,
-    resolvers,
+    schema
   })
 
   await apolloServer.start()
 
   app.use(
-    '/graphql',
+    '/api',
     cors<cors.CorsRequest>(),
     json(),
     expressMiddleware(apolloServer, {
